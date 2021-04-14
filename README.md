@@ -13,6 +13,7 @@ bool xy_modbus(HardwareSerial s, int16_t pin = -1);
 Initialize the library. Should be called prior other library calls.
 - `s` Serial port to use for Modbus RTU communications
 - `pin` Read/Write control pin
+
 *Returns:* `true` on success
 
 ```c
@@ -20,6 +21,7 @@ bool xy_read_ms(uint32_t interval = 0);
 ```
 Set delay between data read sessions.
 - `interval` Delay between devices reads
+
 *Returns:* `true` on success
 
 ```c
@@ -27,6 +29,7 @@ xy_parms xy_get(uint8_t i);
 ```
 Returns last avaiolable data fot the specific device.
 - `i` Posision of device to get data
+
 *Returns:* `xy_parms` structure of filled by the device data.
 
 ```c
@@ -34,6 +37,7 @@ int16_t xy_add(uint8_t slave);
 ```
 Adds the device.
 `slave` Slave ID of the device to add
+
 *Returns:* Device position that should be used for `xy_get()` or `-1` on error.
 
 ```c
@@ -46,4 +50,5 @@ typedef struct xy_parms {
 ```
 
 (c)2021 Alexander Emelianov (a.m.emelianov@gmail.com)
+
 https://github.com/emelianov/XY-MD02
