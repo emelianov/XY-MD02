@@ -14,6 +14,12 @@ bool cbWrite(Modbus::ResultCode event, uint16_t transactionId, void* data) {
     return true;
 }
 
+// RS-485 tranceiver connection pins
+#define RX_PIN 18
+#define TX_PIN 19
+// Direction control pin (-1 if not set)
+#define REDE_PIN -1
+
 // Scan devices from 1 to
 #define SCAN_DEV 10
 // Write configuration to device with id (set 0 to configure none)
@@ -24,24 +30,35 @@ bool cbWrite(Modbus::ResultCode event, uint16_t transactionId, void* data) {
 #define NEW_FIX_H 0
 
 // XY-MD02 registers
+// For 1-base
 #define REG_ID 0x0101
 #define REG_BAUD 0x0102
 #define REG_FIX_T 0x0103
 #define REG_FIX_H 0x0104
+// For 0-base
+//#define REG_ID 0x0101
+//#define REG_BAUD 0x0102
+//#define REG_FIX_T 0x0103
+//#define REG_FIX_H 0x0104
 
 void setup() {
     Serial.begin(115200);
-    Serial1.begin(9600, SERIAL_8N1);
-    mb.begin(&Serial1);
+    Serial1.begin(9600, SERIAL_8N1, RX_PIN, TX_PIN);
+    mb.begin(&Serial1, REDE_PIN);
     mb.master();
     Serial.println("Scaning...");
     for (uint8_t i = 1; i < SCAN_DEV; i++) {
-        uint16_t tmp;
-        mb.readIreg(i, 0, &tmp);
+        uint16_t tmp = 0xFFFF;
+        mb.readIreg(i, XY_BASE, &tmp);
         while (mb.slave())
             mb.task();
-        if (ev != Modbus::EX_TIMEOUT)
-            Serial.printf("Got responce for ID = %d\n", i);
+        if (ev != Modbus::EX_TIMEOUT) {
+            uint16_t val1 = 0xFFFF;
+            mb.readIreg(XY_BASE + 1, &val1);
+            while (mb.slave())
+                mb.task();
+            Serial.printf("Got responce for ID = %d. Ireg0 = %d, Ireg1 = %d\n", i, tmp, val1);
+        }
     }
     if (CONFIG_DEV) {
         mb.writeHreg(CONFIG_DEV, REG_ID, (uint16_t)NEW_ID);

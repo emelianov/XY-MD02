@@ -2,6 +2,8 @@
 
 As ModbusRTU data exchange is slow process (especially in case if device not responding) main idea is to use didicated background task that periodically executes data read requsts from XY-MD02 devices. Main task have ability quickly get last values and time when they was received.
 
+http://sahel.rs/media/sah/techdocs/xy-md02-manual.pdf
+
 ## Prerequirements
 
 https://github.com/emelianov/modbus-esp8266

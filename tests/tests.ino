@@ -19,8 +19,8 @@ void setup() {
   Serial.begin(115200);
   slave.begin((Stream*)&P2);
   slave.slave(SLAVE_ID);
-  slave.addIreg(0, 500);
-  slave.addIreg(1, 600);
+  slave.addIreg(1, 500);
+  slave.addIreg(2, 600);
   xy_modbus((Stream*)&P1);
   xy_add(SLAVE_ID);
   while (!xy_get(0).lastSuccess) {
