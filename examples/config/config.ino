@@ -20,6 +20,8 @@ bool cbWrite(Modbus::ResultCode event, uint16_t transactionId, void* data) {
 // Direction control pin (-1 if not set)
 #define REDE_PIN -1
 
+// First data register
+#define XY_BASE 0
 // Scan devices from 1 to
 #define SCAN_DEV 10
 // Write configuration to device with id (set 0 to configure none)
@@ -36,10 +38,10 @@ bool cbWrite(Modbus::ResultCode event, uint16_t transactionId, void* data) {
 #define REG_FIX_T 0x0103
 #define REG_FIX_H 0x0104
 // For 0-base
-//#define REG_ID 0x0101
-//#define REG_BAUD 0x0102
-//#define REG_FIX_T 0x0103
-//#define REG_FIX_H 0x0104
+//#define REG_ID 0x0100
+//#define REG_BAUD 0x0101
+//#define REG_FIX_T 0x0102
+//#define REG_FIX_H 0x0103
 
 void setup() {
     Serial.begin(115200);
@@ -54,7 +56,7 @@ void setup() {
             mb.task();
         if (ev != Modbus::EX_TIMEOUT) {
             uint16_t val1 = 0xFFFF;
-            mb.readIreg(XY_BASE + 1, &val1);
+            mb.readIreg(i, XY_BASE + 1, &val1);
             while (mb.slave())
                 mb.task();
             Serial.printf("Got responce for ID = %d. Ireg0 = %d, Ireg1 = %d\n", i, tmp, val1);
