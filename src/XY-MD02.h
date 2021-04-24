@@ -12,7 +12,7 @@
 #define XY_SLEEP 5000
 #define XY_SLEEP_DEV 100
 // XY-MD02 First Data Ireg
-#define XY_BASE 0
+#define XY_BASE 1
 // XY-MD02 Data Ireg Count (should not be changed)
 #define XY_COUNT 2
 
